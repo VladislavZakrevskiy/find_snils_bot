@@ -10,8 +10,16 @@ export class HtmlParserService {
 
   async fetchHtml(url: string, SNILS: string): Promise<string> {
     const browser = await puppeteer.launch({
+      args: [
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--single-process',
+        '--no-zygote',
+      ],
       executablePath:
-        '/opt/render/.cache/puppeteer/chrome/linux-127.0.6533.72/chrome-linux64/chrome',
+        process.env.NODE_ENV === 'production'
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
     });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0' }); // Ждём, пока страница полностью загрузится
