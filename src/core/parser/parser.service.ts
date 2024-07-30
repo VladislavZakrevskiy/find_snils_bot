@@ -9,7 +9,10 @@ export class HtmlParserService {
   constructor(private readonly httpService: HttpService) {}
 
   async fetchHtml(url: string, SNILS: string): Promise<string> {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      executablePath:
+        '/opt/render/.cache/puppeteer/chrome/linux-127.0.6533.72/chrome-linux64/chrome',
+    });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0' }); // Ждём, пока страница полностью загрузится
 
